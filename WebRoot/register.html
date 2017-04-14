@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>注册 - 知乎 - Thousands Find</title>
+	<link rel="stylesheet" type="text/css" href="style/register-login.css">
+</head>
+<body>
+<div id="box"></div>
+<div class="cent-box register-box">
+	<div class="cent-box-header">
+		<h1 class="main-title hide">知乎</h1>
+		<h2 class="sub-title">手机试题登陆平台</h2>
+	</div>
+
+	<div class="cont-main clearfix">
+		<div class="index-tab">
+			<div class="index-slide-nav">
+				<a href="login.html">登录</a>
+				<a href="register.html" class="active">注册</a>
+				<div class="slide-bar slide-bar1"></div>				
+			</div>
+		</div>
+
+		<div class="login form">
+			<div class="group">
+
+				<div class="user">
+					<span style="font-size: small;">&nbsp;请选择注册类别:</span>
+					<input type="radio" name="usertype" id="person" value="个人"  onclick="c()" checked="checked" required> 个人
+					<input type="radio" name="usertype" id="enterprise" onclick="a()" value="企业" required> 企业
+				</div>
+				<div class="group-ipt user">
+					<input type="text" name="user" id="user" class="ipt" placeholder="选择一个用户名" required>
+				</div>
+				<div class="group-ipt password">
+					<input type="password" name="password" id="password" class="ipt" placeholder="设置登录密码" required>
+				</div>
+				<div class="group-ipt password1">
+					<input type="password" name="password1" id="password1" class="ipt" placeholder="重复密码" required>
+				</div>
+				<div class="group-ipt telephone">
+					<input type="text" name="telephone" id="telephone" class="ipt" placeholder="联系方式" required>	
+				</div>
+				<div class="group-ipt eName">
+					<input type="hidden" name="eName" id="eName" class="ipt" placeholder="公司名称" required>	
+				</div>
+				<div class="group-ipt eAddress">
+					<input type="hidden" name="eAddress" id="eAddress" class="ipt" placeholder="公司地址" required>	
+				</div>
+			</div>
+		</div>
+
+		<div class="button">
+			<button type="submit" class="login-btn register-btn" id="button">注册</button>
+		</div>
+	</div>
+</div>
+
+<script src='js/particles.js' type="text/javascript"></script>
+<script src='js/background.js' type="text/javascript"></script>
+<script src='http://apps.bdimg.com/libs/jquery/1.6.4/jquery.min.js' type="text/javascript"></script>
+<script src='js/layer/layer.js' type="text/javascript"></script>
+<script>
+	$('.imgcode').hover(function(){
+		layer.tips("看不清？点击更换", '.verify', {
+        		time: 6000,
+        		tips: [2, "#3c3c3c"]
+    		})
+	},function(){
+		layer.closeAll('tips');
+	}).click(function(){
+		$(this).attr('src','http://zrong.me/home/index/imgcode?id=' + Math.random());
+	})
+	function a(){
+	    if(document.getElementById("enterprise").checked){
+			document.getElementById("eName").setAttribute("type", "text");
+			document.getElementById("eAddress").setAttribute("type", "text");
+	    }
+	}
+	function c(){
+	    if(document.getElementById("person").checked){
+			document.getElementById("eName").setAttribute("type", "hidden");
+			document.getElementById("eAddress").setAttribute("type", "hidden");
+	    }
+	}
+/* 	$(".login-btn").click(function(){
+		var email = $("#email").val();
+		var password = $("#password").val();
+		var verify = $("#verify").val();
+		// $.ajax({
+		// url: 'http://www.zrong.me/home/index/userLogin',
+		// type: 'post',
+		// jsonp: 'jsonpcallback',
+  //       jsonpCallback: "flightHandler",
+		// async: false,
+		// data: {
+		// 	'email':email,
+		// 	'password':password,
+		// 	'verify':verify
+		// },
+		// success: function(data){
+		// 	info = data.status;
+		// 	layer.msg(info);
+		// }
+		// })
+
+	}) */
+	$("#remember-me").click(function(){
+		var n = document.getElementById("remember-me").checked;
+		if(n){
+			$(".zt").show();
+		}else{
+			$(".zt").hide();
+		}
+	})
+	$("#button").click(function(){
+	    
+	    if(document.getElementById("person").checked){
+			var user={
+				usertype : "2",
+				username : document.getElementById("user").value,
+				password : document.getElementById("password").value,
+				telephone : document.getElementById("telephone").value
+			};
+			$.ajax({
+			    url:"http://112.74.62.114:8080/Entity/U1ff54ed338bfc/testgen/User/",
+			    contentType: "application/json",
+			    type: "POST",
+			    data:JSON.stringify(user),
+			    success:function(data){
+					 window.location.href = 'http://localhost:8080/testgen/login.html'; 
+			    }
+			})
+	    }
+	    else if(document.getElementById("enterprise").checked){
+			var user={
+				usertype : "1",
+				username : document.getElementById("user").value,
+				password : document.getElementById("password").value,
+				telephone : document.getElementById("telephone").value
+			};
+			
+			$.ajax({
+			    url:"http://112.74.62.114:8080/Entity/U1ff54ed338bfc/testgen/User/",
+			    contentType: "application/json",
+			    type: "POST",
+			    data:JSON.stringify(user),
+			    success:function(data){
+					var company = {
+						companyname : document.getElementById("eName").value,
+						companyaddress : document.getElementById("eAddress").value,
+						userid : data.id
+					};
+					
+					$.ajax({
+					    url:"http://112.74.62.114:8080/Entity/U1ff54ed338bfc/testgen/Company/",
+					    contentType: "application/json",
+					    type: "POST",
+					    data:JSON.stringify(company),
+					    success:function(data){
+							window.location.href = 'http://localhost:8080/testgen/login.html';
+					    }
+					})
+			    }
+			})
+		
+	    }
+	})
+</script>
+</body>
+</html>
